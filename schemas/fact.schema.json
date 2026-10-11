@@ -1,0 +1,118 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "FactRecord",
+  "description": "Factual extraction schema with unit, currency, period, accounting basis, and source-span verification (C2-R04)",
+  "type": "object",
+  "required": [
+    "fact_id",
+    "issuer_id",
+    "metric",
+    "source_id",
+    "source_sha256",
+    "period",
+    "basis"
+  ],
+  "properties": {
+    "fact_id": {
+      "type": "string",
+      "description": "Unique identifier for this extracted fact record"
+    },
+    "issuer_id": {
+      "type": "string",
+      "description": "Standardized canonical issuer ticker (e.g. NVDA, AMD, MSFT)"
+    },
+    "metric": {
+      "type": "string",
+      "description": "Financial or operational metric name (e.g. REVENUE, CAPEX, DATA_CENTER_REVENUE, OPERATING_INCOME)"
+    },
+    "raw_value_text": {
+      "type": ["string", "null"],
+      "description": "Exact text string as extracted from the source document snippet"
+    },
+    "value": {
+      "type": ["number", "string", "null"],
+      "description": "Raw unscaled numerical value. Missing/unknown value MUST be null, never coerced to 0."
+    },
+    "scale": {
+      "type": "string",
+      "enum": ["UNIT", "THOUSAND", "MILLION", "BILLION", "TRILLION"],
+      "default": "UNIT",
+      "description": "Numerical unit scale multiplier"
+    },
+    "unit": {
+      "type": "string",
+      "description": "Unit of measurement (e.g. USD, PERCENT, RATIO, SHARES)"
+    },
+    "currency": {
+      "type": "string",
+      "description": "ISO currency code (e.g. USD). Non-USD requires explicit conversion policy."
+    },
+    "normalized_usd": {
+      "type": ["number", "string", "null"],
+      "description": "Normalized USD amount as stringified Decimal or number. Null if value is null."
+    },
+    "period": {
+      "type": "string",
+      "description": "Standardized fiscal period (e.g. Q2 2026, FY2025)"
+    },
+    "period_type": {
+      "type": "string",
+      "enum": ["QUARTERLY", "ANNUAL", "HALF_YEAR", "TTM"],
+      "description": "Cadence classification to prevent conflation of annual and quarterly figures"
+    },
+    "basis": {
+      "type": "string",
+      "enum": ["GAAP", "NON_GAAP"],
+      "description": "Accounting basis. Merging or comparing GAAP with NON_GAAP is prohibited."
+    },
+    "source_id": {
+      "type": "string",
+      "description": "Identifier of the verified registered source filing"
+    },
+    "source_sha256": {
+      "type": "string",
+      "pattern": "^[a-fA-F0-9]{64}$",
+      "description": "SHA-256 digest of the source filing"
+    },
+    "span_start": {
+      "type": ["integer", "null"],
+      "minimum": 0,
+      "description": "0-indexed character start offset within source text"
+    },
+    "span_end": {
+      "type": ["integer", "null"],
+      "minimum": 0,
+      "description": "0-indexed character end offset within source text"
+    },
+    "source_snippet": {
+      "type": ["string", "null"],
+      "description": "Excerpted sentence or table row from which the fact was extracted"
+    },
+    "available_at": {
+      "type": ["string", "null"],
+      "description": "Point-in-time publication timestamp (UTC ISO-8601)"
+    },
+    "is_revised": {
+      "type": "boolean",
+      "default": false,
+      "description": "True if this fact is from an amended filing (10-K/A or 10-Q/A)"
+    },
+    "supersedes_fact_id": {
+      "type": ["string", "null"],
+      "description": "Identifier of the previous unrevised fact this record restates"
+    },
+    "revision_number": {
+      "type": "integer",
+      "default": 1,
+      "description": "Filing revision counter (1 for initial, 2 for first amendment)"
+    },
+    "quality_flags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Verification flags (e.g. SPAN_VERIFIED, RESTATED, UNKNOWN_VALUE, GAAP_VERIFIED)"
+    }
+  },
+  "additionalProperties": true
+}

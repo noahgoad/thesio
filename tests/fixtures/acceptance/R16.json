@@ -1,0 +1,1 @@
+{"requirement_id":"C2-R16","negative_cases":[{"id":"empty-pairs","expected":"NO_PAIRED_OBSERVATIONS"},{"id":"duplicate-case-id","expected":"DUPLICATE_CASE"},{"id":"non-finite-value","expected":"PAIRED_VALUE_INVALID"},{"id":"candidate-baseline-id-mismatch","expected":"PAIRED_CASE_MISMATCH"}],"performance_targets":"NOT_EVALUATED_WITHOUT_ADJUDICATED_CORPUS"}

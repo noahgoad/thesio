@@ -1,0 +1,12 @@
+{
+  "requirement_id": "C2-R15",
+  "mode": "NEGATIVE_CONTRACT_FIXTURES_ONLY",
+  "negative_cases": [
+    {"id": "model-generated-gold", "input": {"case_id": "x", "label_source": "model_output", "split": "holdout"}, "expected": "GOLD_LABEL_NOT_ADJUDICATED"},
+    {"id": "missing-split", "input": {"case_id": "x", "label_source": "adjudicated"}, "expected": "TRIAL_SPLIT_INVALID"},
+    {"id": "empty-ledger", "input": [], "expected": "TRIAL_LEDGER_EMPTY"},
+    {"id": "invalid-protocol-hash", "input": [{"case_id": "x", "label_source": "adjudicated", "split": "development"}], "expected": "PROTOCOL_HASH_INVALID"}
+  ],
+  "contains_adjudicated_gold": false,
+  "effectiveness": "NOT_EVALUATED"
+}

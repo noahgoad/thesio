@@ -1,0 +1,215 @@
+[
+  {
+    "case_id": "R04-CASE-01",
+    "requirement_id": "C2-R04",
+    "provenance_label": "SYNTHETIC",
+    "input": {
+      "metric": "REVENUE",
+      "fact_million": {
+        "value": "1200",
+        "scale": "MILLION",
+        "currency": "USD"
+      },
+      "fact_billion": {
+        "value": "1.2",
+        "scale": "BILLION",
+        "currency": "USD"
+      }
+    },
+    "expected_status": "ACCEPTED",
+    "expected_output": {
+      "normalized_usd_million": "1200000000",
+      "normalized_usd_billion": "1200000000",
+      "are_equal": true,
+      "scale_multiplier_ratio": "1000"
+    },
+    "prohibited_effects": ["SCALE_CONFLATION", "FLOAT_PRECISION_TRUNCATION"],
+    "rationale": "1200 Million USD and 1.2 Billion USD must both normalize to 1,200,000,000 USD via Decimal arithmetic.",
+    "author": "tester-core"
+  },
+  {
+    "case_id": "R04-CASE-02",
+    "requirement_id": "C2-R04",
+    "provenance_label": "SYNTHETIC",
+    "input": {
+      "metric": "NET_INCOME",
+      "value": "-450.5",
+      "scale": "MILLION",
+      "currency": "USD"
+    },
+    "expected_status": "ACCEPTED",
+    "expected_output": {
+      "normalized_usd": "-450500000",
+      "is_negative": true
+    },
+    "prohibited_effects": ["DROP_NEGATIVE_SIGN", "ABS_COERCION"],
+    "rationale": "Negative earnings or cash outflows must preserve their negative sign through unit scaling.",
+    "author": "tester-core"
+  },
+  {
+    "case_id": "R04-CASE-03",
+    "requirement_id": "C2-R04",
+    "provenance_label": "CAPTURED_PUBLIC",
+    "input": {
+      "metric": "CAPEX",
+      "value": "850",
+      "scale": "MILLION",
+      "currency": "EUR"
+    },
+    "expected_status": "REJECTED",
+    "expected_output": {
+      "error_code": "CURRENCY_CONVERSION_REQUIRED"
+    },
+    "prohibited_effects": ["SILENT_USD_ASSUMPTION", "ARBITRARY_FX_RATE"],
+    "rationale": "Non-USD currencies (e.g. EUR) must fail-closed rather than silently assuming USD parity.",
+    "author": "tester-core"
+  },
+  {
+    "case_id": "R04-CASE-04",
+    "requirement_id": "C2-R04",
+    "provenance_label": "SYNTHETIC",
+    "input": {
+      "fact_id": "fact-syn-missing-01",
+      "issuer_id": "NVDA",
+      "metric": "AI_GPU_SERVER_ALLOCATION",
+      "value": null,
+      "scale": "MILLION",
+      "currency": "USD",
+      "period": "Q2 2025",
+      "basis": "GAAP",
+      "source_id": "src-sec-nvda-10q-q2-2026",
+      "source_sha256": "4b680c2fdb8beff731a5418b763ec78d4c965b746ea5d63f03a6d4eeff00bbfb"
+    },
+    "expected_status": "ACCEPTED",
+    "expected_output": {
+      "value": null,
+      "normalized_usd": null,
+      "flag": "UNKNOWN_VALUE"
+    },
+    "prohibited_effects": ["COERCE_TO_ZERO", "DEFAULT_TO_EMPTY_STRING"],
+    "rationale": "Missing or undisclosed numerical facts must remain null and never be coerced to 0.",
+    "author": "tester-core"
+  },
+  {
+    "case_id": "R04-CASE-05",
+    "requirement_id": "C2-R04",
+    "provenance_label": "SYNTHETIC",
+    "input": {
+      "issuer_id": "MSFT",
+      "metric": "CAPEX",
+      "period_a": "FY2024",
+      "period_b": "Q1 2024",
+      "basis": "GAAP"
+    },
+    "expected_status": "REJECTED",
+    "expected_output": {
+      "error_code": "PERIOD_TYPE_MISMATCH"
+    },
+    "prohibited_effects": ["DIRECT_ANNUAL_QUARTERLY_MERGE", "SILENT_CADENCE_ASSUMPTION"],
+    "rationale": "Directly comparing an ANNUAL period with a QUARTERLY period is prohibited without explicit annualized adjustment.",
+    "author": "tester-core"
+  },
+  {
+    "case_id": "R04-CASE-06",
+    "requirement_id": "C2-R04",
+    "provenance_label": "SYNTHETIC",
+    "input": {
+      "original_fact": {
+        "fact_id": "fact-orig-01",
+        "issuer_id": "NVDA",
+        "metric": "REVENUE",
+        "value": "60.9",
+        "scale": "BILLION",
+        "currency": "USD",
+        "period": "FY2024",
+        "basis": "GAAP",
+        "source_id": "src-sec-nvda-10k-fy2024",
+        "source_sha256": "4b680c2fdb8beff731a5418b763ec78d4c965b746ea5d63f03a6d4eeff00bbfb",
+        "revision_number": 1
+      },
+      "revised_fact": {
+        "fact_id": "fact-rev-01",
+        "issuer_id": "NVDA",
+        "metric": "REVENUE",
+        "value": "60.8",
+        "scale": "BILLION",
+        "currency": "USD",
+        "period": "FY2024",
+        "basis": "GAAP",
+        "source_id": "src-sec-nvda-10ka-fy2024",
+        "source_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+      },
+      "restatement_reason": "10-K/A revenue timing adjustment"
+    },
+    "expected_status": "ACCEPTED",
+    "expected_output": {
+      "is_revised": true,
+      "supersedes_fact_id": "fact-orig-01",
+      "revision_number": 2,
+      "original_preserved_value": "60.9"
+    },
+    "prohibited_effects": ["MUTATE_ORIGINAL_RECORD_IN_PLACE", "OVERWRITE_AUDIT_TRAIL"],
+    "rationale": "Amended filings (10-K/A) must emit a new revision record and preserve historical prior filings immutably.",
+    "author": "tester-core"
+  },
+  {
+    "case_id": "R04-CASE-07",
+    "requirement_id": "C2-R04",
+    "provenance_label": "CAPTURED_PUBLIC",
+    "input": {
+      "issuer_id": "AMD",
+      "metric": "OPERATING_INCOME",
+      "fact_gaap": {
+        "basis": "GAAP",
+        "value": "269",
+        "scale": "MILLION",
+        "period": "Q2 2024"
+      },
+      "fact_non_gaap": {
+        "basis": "NON_GAAP",
+        "value": "1264",
+        "scale": "MILLION",
+        "period": "Q2 2024"
+      }
+    },
+    "expected_status": "REJECTED",
+    "expected_output": {
+      "error_code": "BASIS_MISMATCH"
+    },
+    "prohibited_effects": ["BLEND_GAAP_NON_GAAP", "SILENT_BASIS_COERCION"],
+    "rationale": "GAAP and Non-GAAP operating metrics cannot be combined or compared in variance calculations without raising an error.",
+    "author": "tester-core"
+  },
+  {
+    "case_id": "R04-CASE-08",
+    "requirement_id": "C2-R04",
+    "provenance_label": "CAPTURED_PUBLIC",
+    "input": {
+      "source_text": "NVIDIA reported revenue for the second quarter of fiscal 2025 of $30.04 billion, up 122% from a year ago.",
+      "valid_span": {
+        "span_start": 65,
+        "span_end": 79,
+        "expected_snippet": "$30.04 billion"
+      },
+      "out_of_bounds_span": {
+        "span_start": 200,
+        "span_end": 250,
+        "expected_snippet": "$30.04 billion"
+      },
+      "mismatch_span": {
+        "span_start": 65,
+        "span_end": 79,
+        "expected_snippet": "$99.99 billion"
+      }
+    },
+    "expected_status": "VERIFIED_WITH_NEGATIVE_CHECKS",
+    "expected_output": {
+      "valid_extracted_text": "$30.04 billion",
+      "out_of_bounds_error": "SPAN_OUT_OF_BOUNDS",
+      "mismatch_error": "SPAN_TEXT_MISMATCH"
+    },
+    "prohibited_effects": ["ACCEPT_OUT_OF_BOUNDS_SPANS", "ACCEPT_MISMATCHED_SNIPPET"],
+    "rationale": "100% of material claims must trace to exact in-bounds character spans and verified snippet text.",
+    "author": "tester-core"
+  }
+]

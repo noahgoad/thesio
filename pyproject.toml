@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools==83.0.0", "wheel==0.45.1"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "narrative-research-desk"
+version = "0.1.0"
+requires-python = ">=3.12,<3.13"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+narrative_research_desk = ["templates/*.html", "static/*.css", "static/*.js", "static/*.png"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--strict-markers"
+markers = [
+  "public_read: opt-in public source check",
+  "forward_paper: opt-in wall-clock paper observation",
+  "user_study: evidence from consenting human participants"
+]

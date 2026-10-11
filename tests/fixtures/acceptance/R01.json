@@ -1,0 +1,115 @@
+[
+  {
+    "case_id": "R01-CASE-01",
+    "requirement_id": "C2-R01",
+    "provenance_label": "SYNTHETIC",
+    "input": {
+      "source_id": "syn-empty",
+      "payload_base64": "",
+      "origin": "fixture://empty-payload",
+      "permission": "USER_OWNED",
+      "captured_at": "2026-09-15T00:00:00Z",
+      "role": "FIXTURE_DATA"
+    },
+    "expected_status": "REJECTED",
+    "expected_output": {
+      "error_code": "EMPTY_SOURCE"
+    },
+    "prohibited_effects": ["SILENT_EMPTY_REGISTRATION", "ZERO_BYTE_PROVENANCE_HASH"],
+    "rationale": "Empty byte payloads cannot be verified for textual or numerical evidence.",
+    "author": "tester-core"
+  },
+  {
+    "case_id": "R01-CASE-02",
+    "requirement_id": "C2-R01",
+    "provenance_label": "SYNTHETIC",
+    "input": {
+      "source_id": "syn-unknown-perm",
+      "payload_base64": "SGVsbG8gd29ybGQ=",
+      "origin": "fixture://unknown-perm",
+      "permission": "UNKNOWN",
+      "captured_at": "2026-09-15T00:00:00Z",
+      "role": "FIXTURE_DATA"
+    },
+    "expected_status": "REJECTED",
+    "expected_output": {
+      "error_code": "PERMISSION_UNKNOWN"
+    },
+    "prohibited_effects": ["DEFAULT_TO_LICENSED", "PROCEED_WITHOUT_RIGHTS"],
+    "rationale": "Unknown permissions must fail-closed to avoid copyright or licensing violations.",
+    "author": "tester-core"
+  },
+  {
+    "case_id": "R01-CASE-03",
+    "requirement_id": "C2-R01",
+    "provenance_label": "SYNTHETIC",
+    "input": {
+      "source_id": "syn-tampered-payload",
+      "payload_base64": "VGFtcGVyZWQgZmlsaW5nIGNvbnRlbnQ=",
+      "origin": "fixture://tampered",
+      "expected_sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "expected_status": "REJECTED",
+    "expected_output": {
+      "error_code": "SOURCE_HASH_MISMATCH"
+    },
+    "prohibited_effects": ["ACCEPT_MODIFIED_PAYLOAD", "MUTATE_HISTORICAL_RECORD"],
+    "rationale": "Hash integrity check must reject any payload whose content hash differs from registered provenance.",
+    "author": "tester-core"
+  },
+  {
+    "case_id": "R01-CASE-04",
+    "requirement_id": "C2-R01",
+    "provenance_label": "CAPTURED_PUBLIC",
+    "input": {
+      "source_name": "Narrative Alpha Reference",
+      "expected_buidl": "BUIDL_S2_042",
+      "actual_buidl": "BUIDL_WRONG_999"
+    },
+    "expected_status": "REJECTED",
+    "expected_output": {
+      "error_code": "BUIDL_ID_MISMATCH"
+    },
+    "prohibited_effects": ["ATTRIBUTION_CONFUSION", "CLAIM_WRONG_ORIGIN"],
+    "rationale": "Winner reference must correspond to verified competition BUIDL registration.",
+    "author": "tester-core"
+  },
+  {
+    "case_id": "R01-CASE-05",
+    "requirement_id": "C2-R01",
+    "provenance_label": "CAPTURED_PUBLIC",
+    "input": {
+      "source_id": "post-cutoff-snapshot",
+      "captured_at": "2026-09-20T00:00:00Z"
+    },
+    "expected_status": "REJECTED",
+    "expected_output": {
+      "error_code": "SNAPSHOT_AFTER_AWARD_DATE"
+    },
+    "prohibited_effects": ["FORWARD_LOOKAHEAD", "POST_AWARD_SURVIVORSHIP_LEAKAGE"],
+    "rationale": "Competition reference snapshot taken after award cutoff cannot be claimed as baseline context.",
+    "author": "tester-core"
+  },
+  {
+    "case_id": "R01-CASE-06",
+    "requirement_id": "C2-R01",
+    "provenance_label": "CAPTURED_PUBLIC",
+    "input": {
+      "source_id": "sec-nvda-10q-q2-2026",
+      "payload_base64": "TlZJRElBIDIwMjYgUTIgUmV2ZW51ZTogJDMwLjAgQmlsbGlvbg==",
+      "origin": "https://www.sec.gov/edgar/data/1045810",
+      "permission": "LICENSED",
+      "captured_at": "2026-09-14T10:00:00Z",
+      "role": "PRIMARY_FILING"
+    },
+    "expected_status": "ACCEPTED",
+    "expected_output": {
+      "sha256": "4b680c2fdb8beff731a5418b763ec78d4c965b746ea5d63f03a6d4eeff00bbfb",
+      "byte_length": 38,
+      "role": "PRIMARY_FILING"
+    },
+    "prohibited_effects": ["REHOSTING_PAID_CONTENT", "LIVE_API_EXECUTION"],
+    "rationale": "Valid public EDGAR filing with complete provenance fields.",
+    "author": "tester-core"
+  }
+]

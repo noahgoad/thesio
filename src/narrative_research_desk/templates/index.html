@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark"><title>Thesio · Evidence research</title>
+  <link rel="icon" type="image/png" href="/static/thesio-logo.png">
+  <link rel="stylesheet" href="/static/workspace.css">
+  <link rel="stylesheet" href="/static/product.css">
+  <link rel="stylesheet" href="/static/saas.css?v=dream-20261012">
+</head>
+<body>
+  <a class="skip-link" href="#workspace">Skip to research</a>
+  <header class="topbar"><a class="brand" href="/" aria-label="Thesio home"><img class="brand-logo" src="/static/thesio-logo.png" width="44" height="44" alt=""><span>Thesio</span></a><span class="mode-chip"><i></i> SYNTHETIC EXAMPLE</span></header>
+  <main id="workspace" class="shell">
+    <section class="intro"><p class="eyebrow">RESEARCH</p><h1>What are you looking into?</h1><p class="lede">Choose your companies, ask a question and build a brief you can trace back to its sources.</p></section>
+    <nav class="journey" aria-label="Research steps"><span aria-current="step"><b>1</b> Start a question</span><span><b>2</b> Review the evidence</span><span><b>3</b> Save your conclusion</span></nav>
+    <div class="start-layout">
+    <section class="panel setup" aria-labelledby="setup-title"><div class="panel-heading"><div><p class="eyebrow">SYNTHETIC EXAMPLE · NOT MARKET DATA</p><h2 id="setup-title">Try the example</h2></div><span class="step">STEP 1</span></div>
+      <label for="source-kind">What would you like to explore?</label><select id="source-kind"><option value="FIXTURE">Start with an example</option><option value="USER_SUPPLIED">Use my own document</option><option value="PUBLIC_READ" disabled>Explore company financials</option></select>
+      <section id="source-import" hidden aria-labelledby="import-title">
+        <h3 id="import-title">Bring your source</h3>
+        <p>Paste an article or upload a text file (up to 1 MB). Pick a quote that supports your idea and one that questions it. Links identify your source; they do not import its content.</p>
+        <form id="source-form">
+          <details id="filing-controls"><summary>Import a locally authorized SEC filing HTML or text file</summary>
+            <label><input id="filing-mode" type="checkbox"> Use filing import with retained raw bytes</label>
+            <p>Choose a UTF-8 file up to 4 MiB. Extracted text is limited separately to 2 Mi Unicode characters. Enter the original SEC archive URL below and declare your local storage permission. URL/CIK consistency does not authenticate the document. No fetching, publication rights or historical PIT proof is provided.</p>
+            <label for="filing-file">Local filing file</label><input id="filing-file" type="file" accept=".htm,.html,.txt,text/html,text/plain">
+            <label for="filing-format">File format</label><select id="filing-format"><option value="html">HTML</option><option value="text">Plain text</option></select>
+            <label for="filing-cik">Issuer CIK</label><input id="filing-cik" maxlength="10" placeholder="1045810">
+            <label for="filing-accession">SEC accession</label><input id="filing-accession" maxlength="20" placeholder="0001045810-26-000001">
+            <label for="filing-published">Publication timestamp (optional, caller asserted, with timezone)</label><input id="filing-published" maxlength="40" placeholder="2026-02-01T00:00:00Z">
+            <button id="preview-filing" type="button" class="secondary">Preview extracted filing text</button>
+            <small>Preview first, then copy exact quotes from the extracted text. Repeated quotes require explicit Unicode offsets through the API. Scripts and hidden content are excluded; extraction is not factual adjudication.</small>
+          </details>
+          <label for="source-file">Text document (optional)</label><input id="source-file" type="file" accept=".txt,.md,text/plain,text/markdown">
+          <label for="source-text">Source text</label><textarea id="source-text" rows="8" maxlength="1000000" required></textarea>
+          <label><input id="remember-document" type="checkbox"> Remember document text on this browser</label><small>Optional. Without this, choose your uploaded file again after reload. Raw filing bytes are never stored in browser drafts.</small>
+          <button id="suggest-quotes" type="button" class="secondary">Find relevant excerpts</button><div id="quote-suggestions" aria-live="polite"></div>
+          <label for="source-origin">Source title or original URL</label><input id="source-origin" value="Pasted text" maxlength="1000" required>
+          <label for="source-permission">Permission to store this text locally</label><select id="source-permission" required><option value="">Choose permission</option><option value="USER_OWNED">I own this text</option><option value="LICENSED">I have permission to store it</option></select>
+          <label for="evidence-issuer">Issuer ID for these quotes</label><input id="evidence-issuer" value="NVDA" pattern="[A-Z0-9._-]{1,32}" required>
+          <label for="support-quote">Supporting quote (exact text, optional)</label><textarea id="support-quote" rows="2" maxlength="8000"></textarea>
+          <label for="challenge-quote">Challenging quote (exact text, optional)</label><textarea id="challenge-quote" rows="2" maxlength="8000"></textarea>
+          <small>Supply at least one quote. A missing side stays unknown. Repeated text cites its first occurrence. Each registration creates an immutable source revision.</small>
+          <button id="register-source" class="secondary" type="submit">Register my source</button>
+        </form>
+      </section>
+      <form id="research-form">
+        <label for="question">What do you want to understand?</label><textarea id="question" name="question" rows="3" required maxlength="4000" aria-describedby="question-help">Does AI spending support NVIDIA growth?</textarea><small id="question-help">Try the ready-made example. Its evidence is illustrative and stays the same when you edit the question.</small>
+        <div class="scope-controls"><div><label for="scope-metric">Financial measure</label><select id="scope-metric"><option value="">Suggest from question</option><option value="revenue">Revenue</option><option value="net_income">Net income</option><option value="capex">Capital spending</option></select></div><div><label for="scope-operation">What to check</label><select id="scope-operation"><option value="">Suggest from question</option><option value="level">Latest figures</option><option value="change">Year-over-year change</option><option value="compare">Compare companies</option></select></div><div><label for="scope-period">Reporting period</label><select id="scope-period"><option value="annual">Annual</option><option value="quarterly">Quarterly</option><option value="latest">Latest available duration</option></select></div></div>
+        <details id="advanced"><summary>Advanced source and scope</summary>
+        <label for="watchlist">Issuer IDs <span class="label-note">separated by commas</span></label><input id="watchlist" name="watchlist" value="NVDA, AMD" required autocomplete="off">
+        <div class="form-grid"><div><label for="source">Registered source</label><input id="source" name="source" value="fixture-ai-capex-001" required autocomplete="off"></div><div><label for="cutoff">Information cutoff (UTC)</label><input id="cutoff" name="cutoff" type="datetime-local" step="0.001" value="2026-09-15T00:00" required></div></div>
+        </details>
+        <button class="primary" type="submit">Explore the evidence <span aria-hidden="true">→</span></button>
+        <p class="disclaimer">Research from your selected source. No live web search.</p>
+      </form>
+    </section>
+    <aside class="research-guide" aria-label="What you will get"><div class="guide-art" aria-hidden="true"><span class="guide-orbit"></span><span class="guide-document">N<span></span><span></span><span></span></span><span class="guide-check">✓</span></div><p class="eyebrow">A CLEARER WAY TO RESEARCH</p><h2>Keep both sides<br>in view.</h2><p>A convincing story is a starting point. Your research brief brings together:</p><ul><li><b>The supporting evidence</b><span>Quotes you can trace to their source.</span></li><li><b>The other side</b><span>Challenges and questions still open.</span></li><li><b>Your own conclusion</b><span>Save your reasoning, then revisit it.</span></li></ul><small>Your work stays in this local workspace.</small></aside>
+    </div>
+    <div id="feedback" class="feedback" role="status" aria-live="polite" tabindex="-1">Ready to explore the synthetic example. No setup needed.</div>
+    <section id="results" hidden aria-labelledby="results-title">
+      <div class="panel result-head"><div><p class="eyebrow">YOUR RESEARCH</p><h2 id="results-title" tabindex="-1">Evidence for your question</h2></div><details><summary>Source details</summary><p>Research ID: <span id="run-id"></span></p><div class="provenance"><span id="result-mode">FIXTURE</span><span id="result-source"></span></div></details></div>
+      <p id="result-boundary">Synthetic example only. These quotes do not establish real NVIDIA performance or a causal link between AI spending and growth.</p><p id="result-question"></p>
+      <section id="answer-brief" class="panel" hidden aria-labelledby="answer-title"><p id="answer-status" class="eyebrow"></p><h2 id="answer-title">Answer from your sources</h2><p id="answer-summary"></p><ul id="answer-gaps"></ul><div id="answer-evidence" class="brief-table-wrap"></div><details><summary>Method and limits</summary><p id="answer-method"></p><details><summary>Verify details</summary><pre id="answer-verification"></pre></details></details></section>
+      <details id="source-context" hidden><summary>Read the supplied document</summary><p id="document-origin"></p><pre id="document-text" style="white-space:pre-wrap;overflow-wrap:anywhere"></pre></details>
+      <details id="filing-provenance-panel" hidden><summary>Local filing integrity and permission details</summary><pre id="filing-provenance" style="white-space:pre-wrap;overflow-wrap:anywhere"></pre></details>
+      <section id="structured-facts" class="panel" hidden aria-labelledby="facts-title"><h2 id="facts-title">Company financials</h2><p>Compare the reported figures and periods. Open a figure’s source details to check the original observation.</p><div id="fact-list"></div><div id="missing-facts"></div></section>
+      <div class="evidence-grid"><article class="panel evidence"><h2>What supports it</h2><div id="supports"></div></article><article class="panel evidence"><h2>What challenges it</h2><div id="challenges"></div></article></div>
+      <div class="evidence-grid"><article class="panel evidence"><p class="eyebrow">Source quotes and verification</p><div id="citations"></div></article><article class="panel evidence counter"><p class="eyebrow">What is still unknown</p><p id="unknown">This synthetic source does not establish whether AI spending causes NVIDIA growth, how large any effect is, or whether growth will continue. Real source evidence is needed to answer the question.</p><div id="counterevidence"></div><details id="source-limits" hidden><summary>Source coverage and limitations</summary><p id="source-limits-copy"></p></details></article></div>
+      <div class="panel compare"><div class="panel-heading"><div><p class="eyebrow">STEP 2 · REVIEW BOTH INTERPRETATIONS</p><h2>Compare interpretations</h2></div><button id="reload" class="secondary" type="button">Reload research</button></div><div id="narratives" class="narratives"></div></div>
+      <section id="portfolio-panel" class="panel" hidden aria-labelledby="portfolio-title"><h2 id="portfolio-title">How would this change your portfolio?</h2><p>Compare two allocation ideas with what you hold today. Add companies below; any unallocated amount stays in cash.</p>
+        <label for="portfolio-file">Import positions CSV (optional)</label><input id="portfolio-file" type="file" accept=".csv,text/csv">
+        <label for="portfolio-positions">Current positions: issuer_id,weight (one per line)</label><textarea id="portfolio-positions" rows="4" maxlength="10000" placeholder="NVDA,0.30&#10;MSFT,0.20"></textarea>
+        <p>Use up to 60% for each option and up to 25% for one company. Choose companies covered by this research.</p>
+        <div class="form-grid"><div><label for="basket-a">Basket A: issuer_id,weight</label><textarea id="basket-a" rows="4" maxlength="2000" placeholder="NVDA,0.25&#10;AMD,0.20"></textarea><label for="rationale-a">Basket A thesis or rationale</label><textarea id="rationale-a" rows="2" maxlength="1000"></textarea><label for="invalidation-a">Basket A invalidation condition</label><textarea id="invalidation-a" rows="2" maxlength="1000"></textarea></div><div><label for="basket-b">Basket B: issuer_id,weight</label><textarea id="basket-b" rows="4" maxlength="2000" placeholder="AMD,0.25"></textarea><label for="rationale-b">Basket B thesis or rationale</label><textarea id="rationale-b" rows="2" maxlength="1000"></textarea><label for="invalidation-b">Basket B invalidation condition</label><textarea id="invalidation-b" rows="2" maxlength="1000"></textarea></div></div>
+        <details><summary>How this comparison works</summary><p>Each option replaces 60% of your portfolio. We keep 40% of your current holdings and add your proposed allocations. The rest stays in cash. These are your scenarios, not recommended allocations.</p></details>
+        <button id="compare-portfolio" class="primary" type="button">Compare portfolio and baskets</button><div id="portfolio-comparison" aria-live="polite"></div>
+      </section>
+      <section class="panel decision"><p class="eyebrow">YOUR RESEARCH CONCLUSION</p><h2>Save your conclusion</h2><p>Your judgment about the question. This does not confirm source accuracy.</p><label for="conclusion-verdict">My conclusion</label><select id="conclusion-verdict"><option value="">Choose a conclusion</option><option value="supports">Supports</option><option value="challenges">Challenges</option><option value="insufficient">Insufficient evidence</option></select><fieldset id="conclusion-evidence"><legend>Evidence for my conclusion</legend><div id="conclusion-evidence-list"></div></fieldset><label for="decision-note">Note (optional)</label><input id="decision-note" maxlength="1000"><button id="save-conclusion" class="primary" type="button" disabled>Save my conclusion</button><details id="legacy-choice"><summary>Save an interpretation choice</summary><p>Existing interpretation choices keep their original meaning.</p><button id="choose" class="secondary" type="button" disabled>Save choice</button></details><a id="export" class="secondary export" hidden download="research-brief.json">Export brief JSON</a><a id="export-md" class="secondary export" hidden download="research-brief.md">Export brief Markdown</a></section>
+    </section>
+  </main>
+  <footer><span>LOCAL RESEARCH ONLY</span><span>Synthetic example data is not real market evidence.</span></footer>
+  <script src="/static/research-session.js" defer></script>
+  <script src="/static/workspace.js" defer></script>
+  <script src="/static/product.js" defer></script>
+  <script src="/static/saas.js" defer></script>
+  <script src="/static/explanation.js" defer></script>
+</body></html>

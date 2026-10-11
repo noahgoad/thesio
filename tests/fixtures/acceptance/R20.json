@@ -1,0 +1,13 @@
+{
+  "requirement_id": "C2-R20",
+  "cases": [
+    {"id": "exact_20_id_mapping", "expected": "each MUST maps once to one of D/C/U/R/V/H"},
+    {"id": "pass_without_evidence", "expected": "no points"},
+    {"id": "missing_gate_evidence", "expected": "gate cannot pass"},
+    {"id": "duplicate_or_missing_id", "expected": "reject"},
+    {"id": "category_mapping_drift", "expected": "reject"},
+    {"id": "unmeasured_user_study", "expected": "G4 fails; effectiveness NOT_EVALUATED"},
+    {"id": "independent_reproduction_missing", "expected": "G5 fails"},
+    {"id": "unknown_defect_count", "expected": "complete false"}
+  ]
+}

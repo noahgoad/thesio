@@ -1,0 +1,19 @@
+{
+  "fixture_mode": "FIXTURE",
+  "source": {
+    "source_id": "fixture-ai-capex-001",
+    "origin": "fixture://synthetic-ai-capex",
+    "permission": "USER_OWNED",
+    "captured_at": "2026-09-14T12:00:00Z",
+    "available_at": "2026-09-14T12:00:00Z",
+    "text": "SYNTHETIC FIXTURE ONLY. NVDA revenue expanded in this example. The same example flags concentrated capex and margin uncertainty."
+  },
+  "facts": [
+    {"fact_id": "fixture-fact-revenue", "issuer_id": "NVDA", "metric": "revenue_direction", "value": "positive", "unit": "qualitative", "period": "FIXTURE_PERIOD", "basis": "SYNTHETIC"},
+    {"fact_id": "fixture-fact-margin-risk", "issuer_id": "NVDA", "metric": "margin_risk", "value": "uncertain", "unit": "qualitative", "period": "FIXTURE_PERIOD", "basis": "SYNTHETIC"}
+  ],
+  "narratives": [
+    {"narrative_id": "growth-support", "title": "Growth support", "thesis": "The fixture describes revenue expansion.", "fact_id": "fixture-fact-revenue", "quote": "NVDA revenue expanded in this example.", "quality": 0.8, "relevance": 0.9, "recency": 0.7, "conflict": 0.1, "counter_fact_id": "fixture-fact-missing-counter"},
+    {"narrative_id": "margin-risk", "title": "Margin risk", "thesis": "The fixture also describes capex concentration and margin uncertainty.", "fact_id": "fixture-fact-margin-risk", "quote": "The same example flags concentrated capex and margin uncertainty.", "quality": 0.75, "relevance": 0.85, "recency": 0.7, "conflict": 0.15, "counter_fact_id": "fixture-fact-revenue"}
+  ]
+}

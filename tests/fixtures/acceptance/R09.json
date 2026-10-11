@@ -1,0 +1,11 @@
+[
+  {"case_id":"R09_VALID_FIXTURE_RUN","expected_http":200,"expected":"Two cited narratives, two equal-budget baskets, visible counterevidence state, readable run ID, human decision, provenance-bound export."},
+  {"case_id":"R09_INVALID_SCHEMA_OR_MODE","expected_http":422,"expected":"Reject before service invocation."},
+  {"case_id":"R09_UNKNOWN_SOURCE","expected_http":404,"expected":"SOURCE_NOT_FOUND."},
+  {"case_id":"R09_SOURCE_AFTER_CUTOFF","expected_http":422,"expected":"SOURCE_AFTER_CUTOFF."},
+  {"case_id":"R09_SAME_RUN_SAME_INPUT","expected_http":200,"expected":"Return stable prior run without recomputation or duplicate record."},
+  {"case_id":"R09_SAME_RUN_CHANGED_INPUT","expected_http":409,"expected":"RUN_ID_CONFLICT."},
+  {"case_id":"R09_PROVIDER_ERROR","expected_http":503,"expected":"Provider unavailable; no fabricated result."},
+  {"case_id":"R09_REQUEST_OVER_10_MIB","expected_http":413,"expected":"REQUEST_TOO_LARGE before domain service."},
+  {"case_id":"R09_DECISION_OUTSIDE_RUN","expected_http":422,"expected":"NARRATIVE_NOT_IN_RUN."}
+]

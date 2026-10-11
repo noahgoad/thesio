@@ -1,0 +1,36 @@
+{
+  "protocol_version": "C2-R15-v1.1-local-preregistration",
+  "protocol_lock_status": "FROZEN_FOR_FUTURE_EVALUATION_ONLY",
+  "pre_prompt_tuning_freeze": false,
+  "dataset_status": "NOT_ACQUIRED_OR_ADJUDICATED",
+  "dataset_requirements": {
+    "minimum_facts": 100,
+    "minimum_issuers": 8,
+    "minimum_research_questions": 20,
+    "split_disjoint_by": ["document_id", "issuer_id"]
+  },
+  "targets": {
+    "numeric_fact_accuracy_min": 0.98,
+    "issuer_attribution_precision_min": 0.99,
+    "fabricated_material_citations_max": 0
+  },
+  "baseline_requirements": [
+    "generic_chatbot_on_the_same_permitted_corpus",
+    "manual_investor_relations_document_reading_on_the_same_permitted_corpus"
+  ],
+  "frozen_protocol": {
+    "hypothesis": "Source-bound issuer research briefs improve numeric fact accuracy and attribution without fabricated material citations.",
+    "primary_metric": "numeric_fact_accuracy_on_adjudicated_holdout",
+    "baseline": "generic_chatbot_and_manual_document_reading_on_identical_permitted_corpus",
+    "split": "document_and_issuer_disjoint_70_percent_development_30_percent_holdout",
+    "cost_assumptions": "Record model, prompt, corpus, document, issuer, retrieval, and human-review costs; do not impute missing values.",
+    "acceptance": "Accuracy >= 0.98; issuer attribution precision >= 0.99; zero fabricated material citations; compare both baselines on identical cases.",
+    "trial_budget": 3
+  },
+  "evidence_status": "NOT_EVALUATED_NO_ADJUDICATED_CORPUS_OR_BASELINE",
+  "limitations": [
+    "This protocol was recorded after initial prompt development and therefore cannot satisfy the historical pre-tuning freeze requirement.",
+    "No user-supplied or independently adjudicated facts, issuer set, research questions, or source-rights evidence are included.",
+    "Do not report target attainment or effectiveness until the required corpus and both baselines are measured."
+  ]
+}

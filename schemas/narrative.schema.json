@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Narrative Research Citation",
+  "type": "object",
+  "required": ["claim_id", "material"],
+  "properties": {
+    "claim_id": {"type": "string", "minLength": 1},
+    "material": {"type": "boolean"},
+    "citation": {
+      "type": "object",
+      "required": ["source_id", "source_sha256", "start", "end", "quote"],
+      "properties": {
+        "source_id": {"type": "string"},
+        "source_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "start": {"type": "integer", "minimum": 0},
+        "end": {"type": "integer", "minimum": 1},
+        "quote": {"type": "string", "minLength": 1},
+        "counter_fact_id": {"type": "string"}
+      }
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "requirement_id": "C2-R19",
+  "cases": [
+    {"id": "fixture_reproduce", "expected": "DETERMINISTIC_HASH_BOUND_ARTIFACTS; FIXTURE; NO_OVERWRITE"},
+    {"id": "unsupported_profile", "expected": "PROFILE_UNSUPPORTED; no output created"},
+    {"id": "invalid_manifest", "expected": "MANIFEST_INVALID; no output created"},
+    {"id": "clean_offline_install", "expected": "documented recipe; independent clean reviewer remains required"},
+    {"id": "optional_credential_absent", "expected": "offline fixture path runs without credentials"},
+    {"id": "missing_file", "expected": "INVALID_BUNDLE_PATH"},
+    {"id": "hash_mismatch", "expected": "BUNDLE_HASH_MISMATCH"},
+    {"id": "windows_path", "expected": "path containment validated with pathlib resolved paths"},
+    {"id": "seed_variation", "expected": "not claimed unless deterministic artifacts are compared"},
+    {"id": "redistribution_rights", "expected": "source rights documented or data omitted with acquisition recipe"},
+    {"id": "backup_restore", "expected": "must be run against a real bundle before release PASS"},
+    {"id": "secret_file", "expected": "SECRET_FILE_FORBIDDEN"}
+  ]
+}

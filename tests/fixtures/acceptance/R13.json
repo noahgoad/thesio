@@ -1,0 +1,11 @@
+[
+  {"case_id":"R13_RESTART_RECOVERY","expected":"run, input hash, and decision are available after service restart"},
+  {"case_id":"R13_SAME_ID_SAME_INPUT","expected":"retry returns the persisted run without inserting another record"},
+  {"case_id":"R13_SAME_ID_DIFFERENT_INPUT","expected":"HTTP 409 RUN_ID_CONFLICT and original record remains unchanged"},
+  {"case_id":"R13_DECISION_CONFLICT","expected":"identical decision is idempotent; conflicting decision returns HTTP 409"},
+  {"case_id":"R13_CONCURRENT_WRITERS","expected":"one insert succeeds; other same-identity writes are idempotent"},
+  {"case_id":"R13_BACKUP_RESTORE","expected":"SQLite backup API restores run count and logical state digest on a new root"},
+  {"case_id":"R13_USER_NOTE_ISOLATION","expected":"decision and note persist in a separate database column, not in source facts"},
+  {"case_id":"R13_WATCHLIST_VERSION","expected":"changed watchlist uses a new run ID while the previous brief remains byte-for-byte unchanged"},
+  {"case_id":"R13_ROLLBACK","expected":"failed insert leaves no partial record; retry can commit once"}
+]

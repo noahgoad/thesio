@@ -1,0 +1,13 @@
+{
+  "requirement_id": "C2-R18",
+  "human_study_required": true,
+  "minimum_participants": 5,
+  "tasks_per_participant": 3,
+  "cases": [
+    {"id": "ai_agents_as_users", "expected": "EXCLUDE_OR_REPORT_SEPARATELY"},
+    {"id": "subjective_likability", "expected": "NOT_A_PRIMARY_EFFECTIVENESS_METRIC"},
+    {"id": "longer_reports_as_quality", "expected": "NOT_A_QUALITY_PROXY"},
+    {"id": "sample_small", "expected": "INCONCLUSIVE"},
+    {"id": "no_human_study", "expected": "NOT_EVALUATED"}
+  ]
+}

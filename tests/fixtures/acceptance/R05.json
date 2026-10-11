@@ -1,0 +1,11 @@
+{
+  "requirement_id": "C2-R05",
+  "cases": [
+    {"id": "wrong-span", "expected": "CITATION_SPAN_INVALID"},
+    {"id": "source-edited", "expected": "CITATION_SOURCE_HASH_MISMATCH"},
+    {"id": "invented-source", "expected": "CITATION_SOURCE_NOT_FOUND"},
+    {"id": "future-version", "expected": "handled by C2 timing gate; not silently selected"},
+    {"id": "out-of-bounds", "expected": "CITATION_SPAN_INVALID"},
+    {"id": "unicode-newline", "expected": "exact Python Unicode span comparison"}
+  ]
+}

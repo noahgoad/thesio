@@ -1,0 +1,182 @@
+{
+  "schema_version": "1.0",
+  "project_id": "C2",
+  "name": "narrative-research-desk-data-sources",
+  "source_policy": {
+    "allowed_origins": [
+      "https://www.sec.gov/edgar",
+      "https://data.sec.gov/submissions",
+      "https://data.sec.gov/api/xbrl/companyfacts",
+      "https://investor.nvidia.com",
+      "https://ir.amd.com",
+      "https://investors.broadcom.com",
+      "https://investors.micron.com",
+      "https://www.intc.com",
+      "https://www.microsoft.com/investor",
+      "https://ir.aboutamazon.com",
+      "https://abc.xyz/investor",
+      "https://investor.tsmc.com",
+      "https://investor.marvell.com",
+      "https://www.asml.com/investors",
+      "https://investors.arm.com",
+      "local://fixtures",
+      "fixture://acceptance"
+    ],
+    "max_upload_size_bytes": 10485760,
+    "max_source_window_days": 90,
+    "allowed_mime_types": [
+      "application/json",
+      "text/csv",
+      "text/plain",
+      "text/html"
+    ],
+    "live_execution_allowed": false,
+    "budget_ceiling_usd": 0.00,
+    "require_available_at_cutoff": true
+  },
+  "materiality_classification": {
+    "material_roles": [
+      "PRIMARY_FILING",
+      "PRIMARY_EVIDENCE",
+      "AUDITED_FINANCIALS",
+      "SEC_EDGAR_10Q",
+      "SEC_EDGAR_10K",
+      "SEC_EDGAR_8K"
+    ],
+    "non_material_roles": [
+      "MARKETING_ONLY",
+      "PRESS_RELEASE_PROMO",
+      "BLOG_POST",
+      "UNVERIFIED_NEWS",
+      "SPONSORED_CONTENT"
+    ]
+  },
+  "cadence": {
+    "SEC_EDGAR_10Q": {
+      "frequency": "QUARTERLY",
+      "stale_after_days": 120,
+      "max_latency_hours": 24
+    },
+    "SEC_EDGAR_10K": {
+      "frequency": "ANNUAL",
+      "stale_after_days": 395,
+      "max_latency_hours": 48
+    },
+    "SEC_EDGAR_8K": {
+      "frequency": "EVENT_DRIVEN",
+      "stale_after_days": 90,
+      "max_latency_hours": 12
+    },
+    "IR_PRESENTATION": {
+      "frequency": "QUARTERLY",
+      "stale_after_days": 120,
+      "max_latency_hours": 48
+    }
+  },
+  "canonical_issuers": [
+    {
+      "issuer_id": "NVDA",
+      "legal_name": "NVIDIA Corporation",
+      "cik": "0001045810",
+      "ticker": "NVDA",
+      "venue": "NASDAQ",
+      "instrument_type": "COMMON_STOCK",
+      "share_class": "COMMON",
+      "sector": "Semiconductors",
+      "primary_material_source": "SEC EDGAR Form 10-Q Q2 FY2025/2026",
+      "is_adr": false,
+      "mapping_verified": true
+    },
+    {
+      "issuer_id": "AMD",
+      "legal_name": "Advanced Micro Devices, Inc.",
+      "cik": "0000002488",
+      "ticker": "AMD",
+      "venue": "NASDAQ",
+      "instrument_type": "COMMON_STOCK",
+      "share_class": "COMMON",
+      "sector": "Semiconductors",
+      "primary_material_source": "SEC EDGAR Form 10-Q Q2 2026",
+      "is_adr": false,
+      "mapping_verified": true
+    },
+    {
+      "issuer_id": "AVGO",
+      "legal_name": "Broadcom Inc.",
+      "cik": "0001730168",
+      "ticker": "AVGO",
+      "venue": "NASDAQ",
+      "instrument_type": "COMMON_STOCK",
+      "share_class": "COMMON",
+      "sector": "Semiconductors",
+      "primary_material_source": "SEC EDGAR Form 10-Q Q3 2026",
+      "is_adr": false,
+      "mapping_verified": true
+    },
+    {
+      "issuer_id": "MU",
+      "legal_name": "Micron Technology, Inc.",
+      "cik": "0000723125",
+      "ticker": "MU",
+      "venue": "NASDAQ",
+      "instrument_type": "COMMON_STOCK",
+      "share_class": "COMMON",
+      "sector": "Semiconductors",
+      "primary_material_source": "SEC EDGAR Form 10-Q Q3 FY2026",
+      "is_adr": false,
+      "mapping_verified": true
+    },
+    {
+      "issuer_id": "INTC",
+      "legal_name": "Intel Corporation",
+      "cik": "0000050863",
+      "ticker": "INTC",
+      "venue": "NASDAQ",
+      "instrument_type": "COMMON_STOCK",
+      "share_class": "COMMON",
+      "sector": "Semiconductors",
+      "primary_material_source": "SEC EDGAR Form 10-Q Q2 2026",
+      "is_adr": false,
+      "mapping_verified": true
+    },
+    {
+      "issuer_id": "MSFT",
+      "legal_name": "Microsoft Corporation",
+      "cik": "0000789019",
+      "ticker": "MSFT",
+      "venue": "NASDAQ",
+      "instrument_type": "COMMON_STOCK",
+      "share_class": "COMMON",
+      "sector": "Systems / Cloud AI",
+      "primary_material_source": "SEC EDGAR Form 10-K FY2026",
+      "is_adr": false,
+      "mapping_verified": true
+    },
+    {
+      "issuer_id": "AMZN",
+      "legal_name": "Amazon.com, Inc.",
+      "cik": "0001018724",
+      "ticker": "AMZN",
+      "venue": "NASDAQ",
+      "instrument_type": "COMMON_STOCK",
+      "share_class": "COMMON",
+      "sector": "Systems / Cloud AI",
+      "primary_material_source": "SEC EDGAR Form 10-Q Q2 2026",
+      "is_adr": false,
+      "mapping_verified": true
+    },
+    {
+      "issuer_id": "GOOGL",
+      "legal_name": "Alphabet Inc.",
+      "cik": "0001652044",
+      "ticker": "GOOGL",
+      "venue": "NASDAQ",
+      "instrument_type": "COMMON_STOCK",
+      "share_class": "CLASS_A",
+      "sector": "Systems / Cloud AI",
+      "primary_material_source": "SEC EDGAR Form 10-Q Q2 2026",
+      "is_adr": false,
+      "mapping_verified": true
+    }
+  ]
+}

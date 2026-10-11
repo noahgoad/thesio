@@ -1,0 +1,10 @@
+{
+  "requirement_id": "C2-R17",
+  "cases": [
+    {"id": "future_revision", "expected": "past prefix unchanged"},
+    {"id": "source_hash_tamper", "expected": "PAST_DECISION_CHANGED"},
+    {"id": "duplicate_headline", "expected": "duplicate multiplicity does not alter deduplicated content"},
+    {"id": "user_note_changes_fact", "expected": "PAST_DECISION_CHANGED"},
+    {"id": "invalid_cutoff", "expected": "TIMEZONE_REQUIRED"}
+  ]
+}

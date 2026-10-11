@@ -1,0 +1,230 @@
+[
+  {
+    "case_id": "R02-CASE-01",
+    "requirement_id": "C2-R02",
+    "provenance_label": "SYNTHETIC",
+    "input": {
+      "source_id": "syn-naive-timestamp",
+      "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "event_at": "2026-09-14T00:00:00",
+      "published_at": "2026-09-14T00:00:01Z",
+      "available_at": "2026-09-14T00:00:02Z",
+      "ingested_at": "2026-09-15T00:00:00Z",
+      "mode": "HISTORICAL_REPLAY",
+      "cutoff": "2026-09-14T00:00:03Z"
+    },
+    "expected_status": "REJECTED",
+    "expected_output": {
+      "error_code": "TIMEZONE_REQUIRED"
+    },
+    "prohibited_effects": ["ASSUME_LOCAL_TIMEZONE", "SILENT_UTC_DEFAULT"],
+    "rationale": "Naive timestamps without timezone info must fail-closed to avoid regional offset drift.",
+    "author": "tester-core"
+  },
+  {
+    "case_id": "R02-CASE-02",
+    "requirement_id": "C2-R02",
+    "provenance_label": "SYNTHETIC",
+    "input": {
+      "source_id": "syn-dst-edt",
+      "source_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "event_at": "2026-06-15T14:30:00-04:00",
+      "published_at": "2026-06-15T14:30:01-04:00",
+      "available_at": "2026-06-15T14:30:02-04:00",
+      "ingested_at": "2026-06-16T00:00:00Z",
+      "mode": "HISTORICAL_REPLAY",
+      "cutoff": "2026-06-15T18:30:03Z"
+    },
+    "expected_status": "ACCEPTED",
+    "expected_output": {
+      "normalized_available_at_utc": "2026-06-15T18:30:02Z"
+    },
+    "prohibited_effects": ["DST_NAIVE_COMPARISON", "HARDCODED_EST_YEAR_ROUND"],
+    "rationale": "EDT daylight saving offset (-04:00) must normalize to UTC before cutoff comparison.",
+    "author": "tester-core"
+  },
+  {
+    "case_id": "R02-CASE-03",
+    "requirement_id": "C2-R02",
+    "provenance_label": "SYNTHETIC",
+    "input": {
+      "source_id": "syn-future-input",
+      "source_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "event_at": "2026-09-14T00:00:00Z",
+      "published_at": "2026-09-14T00:00:01Z",
+      "available_at": "2026-09-14T00:00:05Z",
+      "ingested_at": "2026-09-15T00:00:00Z",
+      "mode": "HISTORICAL_REPLAY",
+      "cutoff": "2026-09-14T00:00:02Z"
+    },
+    "expected_status": "REJECTED",
+    "expected_output": {
+      "error_code": "FUTURE_INPUT"
+    },
+    "prohibited_effects": ["LOOKAHEAD_BIAS", "SILENT_FUTURE_LEAKAGE"],
+    "rationale": "Records available after decision cutoff must be rejected to prevent lookahead contamination.",
+    "author": "tester-core"
+  },
+  {
+    "case_id": "R02-CASE-04",
+    "requirement_id": "C2-R02",
+    "provenance_label": "CAPTURED_PUBLIC",
+    "input": {
+      "source_id": "sec-nvda-10q-amended",
+      "source_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "event_at": "2026-09-14T10:00:00Z",
+      "published_at": "2026-09-15T12:00:00Z",
+      "available_at": "2026-09-15T12:05:00Z",
+      "ingested_at": "2026-09-16T00:00:00Z",
+      "mode": "HISTORICAL_REPLAY",
+      "cutoff": "2026-09-14T23:59:59Z"
+    },
+    "expected_status": "REJECTED",
+    "expected_output": {
+      "error_code": "FUTURE_INPUT"
+    },
+    "prohibited_effects": ["RETROACTIVE_REVISION_CONTAMINATION"],
+    "rationale": "Amended filing available after cutoff cannot be used for decisions at earlier cutoff.",
+    "author": "tester-core"
+  },
+  {
+    "case_id": "R02-CASE-05",
+    "requirement_id": "C2-R02",
+    "provenance_label": "CAPTURED_PUBLIC",
+    "input": {
+      "source_id": "sec-historical-backfill-2024",
+      "source_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "event_at": "2024-05-10T12:00:00Z",
+      "published_at": "2024-05-10T12:01:00Z",
+      "available_at": "2024-05-10T12:02:00Z",
+      "ingested_at": "2026-09-16T08:00:00Z",
+      "mode": "HISTORICAL_BACKTEST",
+      "cutoff": "2024-05-10T15:00:00Z"
+    },
+    "expected_status": "ACCEPTED",
+    "expected_output": {
+      "causal_status": "ELIGIBLE"
+    },
+    "prohibited_effects": ["REJECT_VALID_HISTORICAL_BACKFILL"],
+    "rationale": "Historical data backfilled today is causally eligible since available_at is before cutoff.",
+    "author": "tester-core"
+  },
+  {
+    "case_id": "R02-CASE-06",
+    "requirement_id": "C2-R02",
+    "provenance_label": "CAPTURED_PUBLIC",
+    "input": {
+      "issuer_id": "issuer_googl",
+      "venue": "NASDAQ",
+      "category": "EQUITY",
+      "currency": "USD",
+      "symbols": ["GOOG", "GOOGL"]
+    },
+    "expected_status": "ACCEPTED",
+    "expected_output": {
+      "instruments": [
+        "NASDAQ:EQUITY:GOOG:USD:issuer_googl",
+        "NASDAQ:EQUITY:GOOGL:USD:issuer_googl"
+      ]
+    },
+    "prohibited_effects": ["SYMBOL_COLLISION_OVERWRITE"],
+    "rationale": "Multiple equity symbols for a single issuer must map to distinct instrument IDs.",
+    "author": "tester-core"
+  },
+  {
+    "case_id": "R02-CASE-07",
+    "requirement_id": "C2-R02",
+    "provenance_label": "SYNTHETIC",
+    "input": {
+      "record_id": "obs-conflict-001",
+      "records": [
+        {
+          "record_id": "obs-conflict-001",
+          "value": 100.0,
+          "is_revision": false
+        },
+        {
+          "record_id": "obs-conflict-001",
+          "value": 150.0,
+          "is_revision": false
+        }
+      ]
+    },
+    "expected_status": "REJECTED",
+    "expected_output": {
+      "error_code": "IDENTITY_CONFLICT"
+    },
+    "prohibited_effects": ["LAST_WRITE_WINS_CONFLICT", "SILENT_OVERWRITE"],
+    "rationale": "Conflicting values for identical record_id without revision marker must be rejected.",
+    "author": "tester-core"
+  },
+  {
+    "case_id": "R02-CASE-08",
+    "requirement_id": "C2-R02",
+    "provenance_label": "SYNTHETIC",
+    "input": {
+      "record_id": "obs-null-metric",
+      "source_id": "src-sec-nvda",
+      "source_sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "event_at": "2026-09-14T00:00:00Z",
+      "published_at": "2026-09-14T00:00:01Z",
+      "available_at": "2026-09-14T00:00:02Z",
+      "ingested_at": "2026-09-15T00:00:00Z",
+      "mode": "FIXTURE",
+      "timezone": "UTC",
+      "value": null,
+      "quality_flags": ["MISSING_DATA"]
+    },
+    "expected_status": "ACCEPTED",
+    "expected_output": {
+      "value_is_null": true
+    },
+    "prohibited_effects": ["COERCE_NULL_TO_ZERO", "FABRICATE_ZERO_METRIC"],
+    "rationale": "Missing metrics must remain null and cannot be coerced to 0 or 0.0.",
+    "author": "tester-core"
+  },
+  {
+    "case_id": "R02-CASE-09",
+    "requirement_id": "C2-R02",
+    "provenance_label": "SYNTHETIC",
+    "input": {
+      "source_id": "src-temporal-paradox",
+      "source_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+      "event_at": "2026-09-14T00:00:00Z",
+      "published_at": "2026-09-14T00:00:05Z",
+      "available_at": "2026-09-14T00:00:01Z",
+      "ingested_at": "2026-09-15T00:00:00Z",
+      "mode": "FIXTURE",
+      "cutoff": "2026-09-14T00:00:10Z"
+    },
+    "expected_status": "REJECTED",
+    "expected_output": {
+      "error_code": "AVAILABILITY_BEFORE_PUBLICATION"
+    },
+    "prohibited_effects": ["ACID_TEMPORAL_PARADOX"],
+    "rationale": "available_at cannot precede published_at.",
+    "author": "tester-core"
+  },
+  {
+    "case_id": "R02-CASE-10",
+    "requirement_id": "C2-R02",
+    "provenance_label": "SYNTHETIC",
+    "input": {
+      "source_id": "src-invalid-mode",
+      "source_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+      "event_at": "2026-09-14T00:00:00Z",
+      "published_at": "2026-09-14T00:00:01Z",
+      "available_at": "2026-09-14T00:00:02Z",
+      "ingested_at": "2026-09-15T00:00:00Z",
+      "mode": "INVALID_UNSUPPORTED_MODE",
+      "cutoff": "2026-09-14T00:00:10Z"
+    },
+    "expected_status": "REJECTED",
+    "expected_output": {
+      "error_code": "MODE_UNKNOWN"
+    },
+    "prohibited_effects": ["DEFAULT_TO_UNVERIFIED_MODE"],
+    "rationale": "Unrecognized execution modes must be rejected fail-closed.",
+    "author": "tester-core"
+  }
+]

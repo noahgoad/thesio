@@ -1,0 +1,100 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ObservationRecord",
+  "description": "Normalized observation record schema with point-in-time provenance and causal ordering (C2-R02)",
+  "type": "object",
+  "required": [
+    "record_id",
+    "source_id",
+    "source_sha256",
+    "event_at",
+    "published_at",
+    "available_at",
+    "ingested_at",
+    "timezone",
+    "mode"
+  ],
+  "properties": {
+    "record_id": {
+      "type": "string",
+      "description": "Unique identifier for this observation record"
+    },
+    "source_id": {
+      "type": "string",
+      "description": "Identifier of the registered source document"
+    },
+    "source_url": {
+      "type": ["string", "null"],
+      "description": "Origin URL or path of the source document"
+    },
+    "source_sha256": {
+      "type": "string",
+      "pattern": "^[a-fA-F0-9]{64}$",
+      "description": "SHA-256 digest of the raw source payload"
+    },
+    "source_version": {
+      "type": ["string", "null"],
+      "description": "Source version or document revision"
+    },
+    "instrument_id": {
+      "type": ["string", "null"],
+      "description": "Structured instrument identifier (venue:category:symbol:currency:issuer)"
+    },
+    "issuer_id": {
+      "type": ["string", "null"],
+      "description": "Standardized issuer identifier (e.g. issuer_nvda)"
+    },
+    "category": {
+      "type": ["string", "null"],
+      "description": "Observation category: EARNINGS, FILING, GUIDANCE, MACRO, SENTIMENT"
+    },
+    "event_at": {
+      "type": "string",
+      "description": "Timestamp when the real-world event occurred (UTC ISO-8601)"
+    },
+    "published_at": {
+      "type": "string",
+      "description": "Timestamp when the document or announcement was published (UTC ISO-8601)"
+    },
+    "available_at": {
+      "type": "string",
+      "description": "Timestamp when the document was publicly accessible for decisions (UTC ISO-8601)"
+    },
+    "ingested_at": {
+      "type": "string",
+      "description": "Timestamp when this record was ingested by the local system (UTC ISO-8601)"
+    },
+    "timezone": {
+      "type": "string",
+      "description": "Source timezone name or UTC offset (e.g. UTC, America/New_York, +00:00)"
+    },
+    "mode": {
+      "type": "string",
+      "enum": [
+        "FIXTURE",
+        "PUBLIC_READ",
+        "HISTORICAL_BACKTEST",
+        "HISTORICAL_REPLAY",
+        "FORWARD_PAPER",
+        "USER_TEST"
+      ],
+      "description": "Execution data mode"
+    },
+    "value": {
+      "type": ["number", "string", "null"],
+      "description": "Extracted numerical or categorical value. NULL must not be coerced to 0."
+    },
+    "unit": {
+      "type": ["string", "null"],
+      "description": "Unit of measurement (e.g. USD, PERCENT, RATIO)"
+    },
+    "quality_flags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Quality flags (e.g. MISSING_DATA, AMENDED, REVISED, CAUSAL_VERIFIED)"
+    }
+  },
+  "additionalProperties": true
+}

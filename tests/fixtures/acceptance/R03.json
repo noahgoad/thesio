@@ -1,0 +1,206 @@
+[
+  {
+    "case_id": "R03-CASE-01",
+    "requirement_id": "C2-R03",
+    "provenance_label": "SYNTHETIC",
+    "input": {
+      "issuer_id": "GOOG",
+      "legal_name": "Alphabet Inc.",
+      "cik": "0001652044",
+      "ticker": "GOOG",
+      "venue": "NASDAQ",
+      "instrument_type": "COMMON_STOCK",
+      "share_class": "UNSPECIFIED",
+      "sector": "Systems / Cloud AI",
+      "is_ambiguous": false,
+      "disambiguated": false
+    },
+    "expected_status": "REJECTED",
+    "expected_output": {
+      "error_code": "AMBIGUOUS_SYMBOL"
+    },
+    "prohibited_effects": ["SILENT_SHARE_CLASS_COLLAPSE", "UNMAPPED_TICKER_INFERENCE"],
+    "rationale": "Bare GOOG symbol without share-class disambiguation between voting Class A (GOOGL) and non-voting Class C (GOOG) must be blocked.",
+    "author": "tester-core"
+  },
+  {
+    "case_id": "R03-CASE-02",
+    "requirement_id": "C2-R03",
+    "provenance_label": "SYNTHETIC",
+    "input": {
+      "issuer_id": "TSM",
+      "legal_name": "Taiwan Semiconductor Manufacturing Company Ltd.",
+      "cik": "0001046179",
+      "ticker": "TSM",
+      "venue": "NYSE",
+      "instrument_type": "COMMON_STOCK",
+      "share_class": "COMMON",
+      "sector": "Semiconductors"
+    },
+    "expected_status": "REJECTED",
+    "expected_output": {
+      "error_code": "ADR_MAPPING_AMBIGUOUS"
+    },
+    "prohibited_effects": ["TREAT_ADR_AS_DOMESTIC_COMMON", "OMIT_ADR_CONVERSION_RATIO"],
+    "rationale": "Foreign issuer TSM must be explicitly identified as ADR with adr_ratio rather than domestic common stock.",
+    "author": "tester-core"
+  },
+  {
+    "case_id": "R03-CASE-03",
+    "requirement_id": "C2-R03",
+    "provenance_label": "CAPTURED_PUBLIC",
+    "input": {
+      "issuer_id": "NVDA",
+      "legal_name": "NVIDIA Corporation",
+      "cik": "0009999999",
+      "ticker": "NVDA",
+      "venue": "NASDAQ",
+      "instrument_type": "COMMON_STOCK",
+      "share_class": "COMMON",
+      "sector": "Semiconductors"
+    },
+    "expected_status": "REJECTED",
+    "expected_output": {
+      "error_code": "CIK_MISMATCH"
+    },
+    "prohibited_effects": ["ACCEPT_FABRICATED_CIK", "CROSS_ENTITY_FILING_CONTAMINATION"],
+    "rationale": "SEC CIK must match canonical SEC EDGAR registration (0001045810 for NVIDIA); mismatch must be rejected.",
+    "author": "tester-core"
+  },
+  {
+    "case_id": "R03-CASE-04",
+    "requirement_id": "C2-R03",
+    "provenance_label": "SYNTHETIC",
+    "input": {
+      "issuer": {
+        "issuer_id": "NVDA",
+        "legal_name": "NVIDIA Corporation",
+        "cik": "0001045810",
+        "ticker": "NVDA",
+        "venue": "NASDAQ",
+        "instrument_type": "COMMON_STOCK",
+        "share_class": "COMMON",
+        "sector": "Semiconductors"
+      },
+      "sources": [
+        {
+          "source_id": "src-marketing-pr-01",
+          "origin": "https://nvidianews.nvidia.com/news/product-launch-pr",
+          "role": "MARKETING_ONLY",
+          "permission": "LICENSED"
+        },
+        {
+          "source_id": "src-marketing-blog-02",
+          "origin": "https://blogs.nvidia.com/blog/ai-future",
+          "role": "BLOG_POST",
+          "permission": "LICENSED"
+        }
+      ]
+    },
+    "expected_status": "REJECTED",
+    "expected_output": {
+      "error_code": "NO_MATERIAL_SOURCES"
+    },
+    "prohibited_effects": ["COUNT_PR_AS_MATERIAL_FACT", "ALLOW_MARKETING_ONLY_GATE_PASS"],
+    "rationale": "Issuers with exclusively promotional or marketing sources cannot satisfy the material evidence gate.",
+    "author": "tester-core"
+  },
+  {
+    "case_id": "R03-CASE-05",
+    "requirement_id": "C2-R03",
+    "provenance_label": "SYNTHETIC",
+    "input": {
+      "mode": "FULL_V1",
+      "issuers": [
+        {"issuer_id": "NVDA", "mapping_verified": true, "material_source_count": 1},
+        {"issuer_id": "AMD", "mapping_verified": true, "material_source_count": 1},
+        {"issuer_id": "MSFT", "mapping_verified": true, "material_source_count": 1},
+        {"issuer_id": "GOOGL", "mapping_verified": true, "material_source_count": 1}
+      ]
+    },
+    "expected_status": "INSUFFICIENT",
+    "expected_output": {
+      "gate_passed": false,
+      "status": "INSUFFICIENT",
+      "limitation": "NARROW_DEMO_CANNOT_PASS_FULL_V1_GATE"
+    },
+    "prohibited_effects": ["PASS_FULL_V1_ON_DEMO_DATA", "SURREPTITIOUS_UNIVERSE_SHRINKAGE"],
+    "rationale": "A 4-issuer universe is acceptable only for narrow demo and must fail the Full V1 gate which requires >= 8.",
+    "author": "tester-core"
+  },
+  {
+    "case_id": "R03-CASE-06",
+    "requirement_id": "C2-R03",
+    "provenance_label": "CAPTURED_PUBLIC",
+    "input": {
+      "issuer_id": "AVGO",
+      "legal_name": "Broadcom Inc.",
+      "cik": "0001730168",
+      "ticker": "AVGO",
+      "venue": "NASDAQ",
+      "instrument_type": "COMMON_STOCK",
+      "share_class": "COMMON",
+      "sector": "Semiconductors",
+      "historical_name": "Unverified Fabricated Predecessor Corp"
+    },
+    "expected_status": "REJECTED",
+    "expected_output": {
+      "error_code": "NAME_CHANGE_UNVERIFIED"
+    },
+    "prohibited_effects": ["ALLOW_UNVERIFIED_HISTORICAL_ALIAS", "CORPORATE_ACTION_FABRICATION"],
+    "rationale": "Historical aliases or former corporate names must match verified corporate registry history.",
+    "author": "tester-core"
+  },
+  {
+    "case_id": "R03-CASE-07",
+    "requirement_id": "C2-R03",
+    "provenance_label": "SYNTHETIC",
+    "input": {
+      "issuer_id": "INTC",
+      "legal_name": "Intel Corporation",
+      "cik": "0000050863",
+      "ticker": "INTC",
+      "venue": "NASDAQ",
+      "instrument_type": "COMMON_STOCK",
+      "share_class": "COMMON",
+      "sector": "Semiconductors",
+      "fiscal_year_end": null,
+      "market_cap_tier": null
+    },
+    "expected_status": "ACCEPTED",
+    "expected_output": {
+      "missing_fields": ["fiscal_year_end", "market_cap_tier"],
+      "preserves_null": true
+    },
+    "prohibited_effects": ["COERCE_NULL_TO_ZERO", "INVENT_DEFAULT_FUNDAMENTALS"],
+    "rationale": "Missing optional fundamental metadata must remain null and be explicitly tracked, never coerced to 0 or guessed.",
+    "author": "tester-core"
+  },
+  {
+    "case_id": "R03-CASE-08",
+    "requirement_id": "C2-R03",
+    "provenance_label": "SYNTHETIC",
+    "input": {
+      "mode": "FULL_V1",
+      "issuers": [
+        {"issuer_id": "NVDA", "mapping_verified": true, "material_source_count": 1},
+        {"issuer_id": "AMD", "mapping_verified": true, "material_source_count": 1},
+        {"issuer_id": "AVGO", "mapping_verified": true, "material_source_count": 1},
+        {"issuer_id": "MU", "mapping_verified": true, "material_source_count": 1},
+        {"issuer_id": "INTC", "mapping_verified": true, "material_source_count": 1},
+        {"issuer_id": "MSFT", "mapping_verified": true, "material_source_count": 1},
+        {"issuer_id": "AMZN", "mapping_verified": true, "material_source_count": 1},
+        {"issuer_id": "GOOGL", "mapping_verified": true, "material_source_count": 1}
+      ]
+    },
+    "expected_status": "REJECTED",
+    "expected_output": {
+      "gate_passed": false,
+      "status": "INSUFFICIENT",
+      "valid_count": 0
+    },
+    "prohibited_effects": ["SELF_ASSERTED_FLAGS_COUNT_AS_PROVENANCE", "PASS_WITHOUT_BOUND_SOURCE_BYTES"],
+    "rationale": "Eight caller-set verification/count flags without SEC mapping snapshot bytes or issuer-bound material payloads must not pass the coverage gate.",
+    "author": "tester-core"
+  }
+]
